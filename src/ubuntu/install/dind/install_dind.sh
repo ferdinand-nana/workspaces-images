@@ -40,7 +40,7 @@ curl -o \
     https://kasm-ci.s3.amazonaws.com/dockerd-entrypoint.sh
 chmod +x /usr/local/bin/dockerd-entrypoint.sh
 echo 'hosts: files dns' > /etc/nsswitch.conf
-usermod -aG docker kasm-user
+usermod -aG docker dev
 
 # Install k3d tools
 wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
@@ -50,8 +50,8 @@ curl -o \
 chmod +x /usr/local/bin/kubectl
 
 # Passwordless Sudo
-echo 'kasm-user:kasm-user' | chpasswd
-echo 'kasm-user ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+echo 'dev:dev' | chpasswd
+echo 'dev ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Cleanup
 if [ -z ${SKIP_CLEAN+x} ]; then

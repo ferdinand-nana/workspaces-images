@@ -1,0 +1,48 @@
+# docker build -t kasm/intellij-ubuntu:22.04 -f dockerfile-kasm-intellij-jammy .
+# docker run -it --shm-size=512m -p 6903:6901 -e VNC_PW=password kasm/intellij-ubuntu:22.04
+# ARG BASE_TAG="develop"
+# ARG BASE_IMAGE="core-ubuntu-focal"
+# FROM kasmweb/$BASE_IMAGE:$BASE_TAG
+FROM kasm/core-ubuntu:22.04
+
+USER root
+
+ENV HOME /home/kasm-default-profile
+ENV STARTUPDIR /dockerstartup
+ENV INST_SCRIPTS $STARTUPDIR/install
+ENV DONT_PROMPT_WSL_INSTALL "No_Prompt_please"
+WORKDIR $HOME
+
+######### Customize Container Here ###########
+
+ARG IDEA_VERSION=2024.1
+ARG IDEA_BUILD=2024.1.2
+ARG idea_local_dir=.IntelliJIdea${IDEA_VERSION}
+
+COPY ./src/ubuntu/install/intellij/ideaIU-2024.1.2.tar.gz /opt/idea/installer.tgz
+RUN echo "Untar IntelliJ IDEA Pro ${IDEA_BUILD} ..." \
+    && cd /opt/idea \
+    && tar --strip-components=1 -xzf installer.tgz \
+    && rm installer.tgz
+
+COPY ./src/ubuntu/install/intellij/install_intellij.sh $INST_SCRIPTS/intellij/install_intellij.sh
+RUN bash $INST_SCRIPTS/intellij/install_intellij.sh
+
+COPY ./src/ubuntu/install/intellij/custom_startup.sh $STARTUPDIR/custom_startup.sh
+RUN chmod +x $STARTUPDIR/custom_startup.sh
+RUN chmod 755 $STARTUPDIR/custom_startup.sh
+
+# Update the desktop environment to be optimized for a single application
+RUN cp $HOME/.config/xfce4/xfconf/single-application-xfce-perchannel-xml/* $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/
+RUN cp /usr/share/backgrounds/bg_kasm.png /usr/share/backgrounds/bg_default.png
+RUN apt-get remove -y xfce4-panel
+
+######### End Customizations ###########
+
+RUN chown 1000:0 $HOME
+
+ENV HOME /home/dev
+WORKDIR $HOME
+RUN mkdir -p $HOME && chown -R 1000:0 $HOME
+
+USER 1000
