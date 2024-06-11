@@ -6,13 +6,14 @@ IDEA_VERSION=2024.1
 IDEA_BUILD=2024.1.2
 idea_local_dir=.IntelliJIdea${IDEA_VERSION}
 
-# Install Intellij
-# mkdir -p /opt/idea
-# echo "Copying IntelliJ IDEA Ultimate ${IDEA_BUILD} ..." \
-#     && cp $INST_SCRIPTS/intellij/ideaIU-$IDEA_BUILD.tar.gz /opt/idea/installer.tgz \
-#     && echo "Untar IntelliJ IDEA Pro ${IDEA_BUILD} ..." \
-#     && tar --strip-components=1 -xzf installer.tgz \
-#     && rm installer.tgz
+echo "Installing Intellij..."
+cp "$INST_SCRIPTS/intellij/ideaIU-$IDEA_BUILD.tar.gz" /opt/idea/installer.tgz
+
+cd /opt/idea
+
+echo "Untar IntelliJ IDEA Pro ${IDEA_BUILD} ..."
+tar --strip-components=1 -xzf installer.tgz
+rm installer.tgz
 
 # Desktop icon
 echo "[Desktop Entry]

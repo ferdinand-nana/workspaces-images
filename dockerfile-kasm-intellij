@@ -1,9 +1,8 @@
 # docker build -t kasm/intellij-ubuntu:22.04 -f dockerfile-kasm-intellij-jammy .
 # docker run -it --shm-size=512m -p 6903:6901 -e VNC_PW=password kasm/intellij-ubuntu:22.04
-# ARG BASE_TAG="develop"
-# ARG BASE_IMAGE="core-ubuntu-focal"
-# FROM kasmweb/$BASE_IMAGE:$BASE_TAG
-FROM kasm/core-ubuntu:22.04
+ARG BASE_TAG="develop"
+ARG BASE_IMAGE="core-ubuntu-focal"
+FROM kasmweb/$BASE_IMAGE:$BASE_TAG
 
 USER root
 
@@ -15,17 +14,7 @@ WORKDIR $HOME
 
 ######### Customize Container Here ###########
 
-ARG IDEA_VERSION=2024.1
-ARG IDEA_BUILD=2024.1.2
-ARG idea_local_dir=.IntelliJIdea${IDEA_VERSION}
-
-COPY ./src/ubuntu/install/intellij/ideaIU-2024.1.2.tar.gz /opt/idea/installer.tgz
-RUN echo "Untar IntelliJ IDEA Pro ${IDEA_BUILD} ..." \
-    && cd /opt/idea \
-    && tar --strip-components=1 -xzf installer.tgz \
-    && rm installer.tgz
-
-COPY ./src/ubuntu/install/intellij/install_intellij.sh $INST_SCRIPTS/intellij/install_intellij.sh
+COPY ./src/ubuntu/install/intellij $INST_SCRIPTS/intellij
 RUN bash $INST_SCRIPTS/intellij/install_intellij.sh
 
 COPY ./src/ubuntu/install/intellij/custom_startup.sh $STARTUPDIR/custom_startup.sh
