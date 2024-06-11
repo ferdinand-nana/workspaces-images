@@ -6,14 +6,18 @@ IDEA_VERSION=2024.1
 IDEA_BUILD=2024.1.2
 idea_local_dir=.IntelliJIdea${IDEA_VERSION}
 
+echo "Downloading IntelliJ..."
+cd /tmp
+wget -q -O installer.tar.gz ""https://download.jetbrains.com/idea/ideaIU-${IDEA_BUILD}.tar.gz"
+
 echo "Installing Intellij..."
-cp "$INST_SCRIPTS/intellij/ideaIU-$IDEA_BUILD.tar.gz" /opt/idea/installer.tgz
+mkdir -p /opt/idea
+cp "/tmp/installer.tar.gz" /opt/idea/installer.tar.gz
 
 cd /opt/idea
-
 echo "Untar IntelliJ IDEA Pro ${IDEA_BUILD} ..."
-tar --strip-components=1 -xzf installer.tgz
-rm installer.tgz
+tar --strip-components=1 -xzf installer.tar.gz
+rm installer.tar.gz
 
 # Desktop icon
 echo "[Desktop Entry]
