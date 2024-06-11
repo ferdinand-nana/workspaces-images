@@ -15,7 +15,7 @@ WORKDIR $HOME
 ######### Customize Container Here ###########
 
 COPY ./src/ubuntu/install/intellij $INST_SCRIPTS/intellij
-RUN bash $INST_SCRIPTS/intellij/install_intellij.sh
+RUN bash $INST_SCRIPTS/intellij/install_intellij.sh && rm -rf $INST_SCRIPTS/intellij/
 
 COPY ./src/ubuntu/install/intellij/custom_startup.sh $STARTUPDIR/custom_startup.sh
 RUN chmod +x $STARTUPDIR/custom_startup.sh
