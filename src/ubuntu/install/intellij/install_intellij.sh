@@ -8,7 +8,7 @@ idea_local_dir=.IntelliJIdea${IDEA_VERSION}
 
 echo "Downloading IntelliJ..."
 cd /tmp
-wget -q -O installer.tar.gz ""https://download.jetbrains.com/idea/ideaIU-${IDEA_BUILD}.tar.gz"
+wget -q -O installer.tar.gz "https://download.jetbrains.com/idea/ideaIU-${IDEA_BUILD}.tar.gz"
 
 echo "Installing Intellij..."
 mkdir -p /opt/idea
